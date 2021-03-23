@@ -1,7 +1,4 @@
---Tabell: Författare I tabellen författare vill vi ha
---en Identietskolumn (identity) kallad ID som PK. 
---Därutöver vill vi ha 
---kolumnerna: Förnamn, Efternamn och Födelsedatum i passande datatyper.
+
 
 drop table Authors;
 
@@ -14,26 +11,14 @@ create table Authors (
 
 );
 
---add this line if for date a certain format is needed like format 103 etc.
---birthDate_ddmmyyyy as ( replace(convert(varchar(11), birthDate, 103), ' ', '-') ), 
 
-select * from Authors
+select * from Authors;
+
 insert into Authors (Firstname, AfterName, Birthdate) values('Jonathan', 'Johanson', '1975-03-09');
 insert into Authors (Firstname, AfterName, Birthdate) values('Megan', 'Baker', '1983-05-19'); 
 insert into Authors (Firstname, AfterName, Birthdate) values('Alison', 'Gray', '1968-11-01'); 
 insert into Authors (Firstname, AfterName, Birthdate) values('Dan', 'Kerr', '1977-10-22'); 
 
---truncate table authors;
---the same result as the date format aboue
-
-
-
---Tabell: Böcker I tabellen böcker vill vi ha ISBN13 som primärnyckel med 
---lämpliga constraints. Utöver det vill vi ha kolumnerna: Titel, Språk, Pris, 
---och Utgivningsdatum av passande datatyper. Sist vill vi ha en FK-kolumn FörfattareID
---som pekar mot tabellen Författare. Utöver dessa kolumner får ni gärna lägga till egna med
---information som ni tycker kan vara bra att lagra om varje bok. 
--- International Standard Book Number (ISBN)
 
 create table Books (
     ISBN13 bigint not null,
@@ -42,34 +27,33 @@ create table Books (
 	Price_kr smallmoney not null, 
     PublishDate date not null,
 	AuthorID int not null,
+    PublisherID int,
 	primary key (ISBN13),
 	foreign key (AuthorId) references Authors(ID),
-	CONSTRAINT chk_isbn13 CHECK (ISBN13  like '[0-9]')
+	CONSTRAINT chk_isbn13 CHECK (ISBN13  like '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
+    foreign key (PublisherID) references Publishers(ID),
 );
---select * from Bookstores;
+
 drop table Books;
 
 select * from Books;
 
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9786797379604, 'Sky', 'En', 129.9,'2015-01-11',1);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9784245085381, 'Earth', 'En', 119.9,'2012-02-13',3);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9781852636661, 'Water', 'En', 139.9,'1989-03-03',2);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9786620703576, 'Wind', 'En', 129.9,'1974-07-04',2);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9783721497281, 'Storm', 'En', 99.9,'2020-08-09',2);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9784589562401, 'Lightning', 'En', 329.9,'1990-02-22',3);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9788339434802, 'Mountain', 'En', 109.9,'1995-10-11', 3);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9782317268694, 'Spring', 'En', 229.9,'2008-07-16', 4);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9786527017714, 'Autumn', 'En', 249.9,'2016-12-05', 4);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9787662019991, 'Winter', 'En', 119.9,'2021-03-18', 4);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID) values(9786797379604, 'Sky', 'En', 129.9,'2015-01-11',1,2);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9784245085381, 'Earth', 'En', 119.9,'2012-02-13',3,2);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9781852636661, 'Water', 'En', 139.9,'1989-03-03',2,1);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9786620703576, 'Wind', 'En', 129.9,'1974-07-04',2,1);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9783721497281, 'Storm', 'En', 99.9,'2020-08-09',2,3);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9784589562401, 'Lightning', 'En', 329.9,'1990-02-22',3,3);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9788339434802, 'Mountain', 'En', 109.9,'1995-10-11',3,1);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9782317268694, 'Spring', 'En', 229.9,'2008-07-16',4,2);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9786527017714, 'Autumn', 'En', 249.9,'2016-12-05',4,3);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9787662019991, 'Winter', 'En', 119.9,'2021-03-18',4,2);
 
 
 
-
-
---Tabell: Butiker Utöver ett identity-ID så behöver tabellen 
---kolumner för att lagra butiksnamn samt addressuppgifter. 
 
 drop table Bookstores;
+
 create table BookStores (
     ID int primary key IDENTITY(1,1),
 	[Name] nvarchar(120) not null,
@@ -135,16 +119,14 @@ create TABLE Customers (
     FOREIGN KEY (AddressID) REFERENCES [Address] (ID)
 
 );
+
 drop table Customers;
 
 select * from Customers;
 
 insert into Customers ([Name],AfterName,AddressID) values ( 'Sofia','Bonakdar',1)
-
 insert into Customers ([Name],AfterName,AddressID) values ( 'Elham','Danesh',2)
-
 insert into Customers ([Name],AfterName,AddressID) values ( 'Lulin','Bonakdar',3)
-
 insert into Customers ([Name],AfterName,AddressID) values ( 'Wenji','chin',4)
 
 
@@ -163,6 +145,7 @@ FOREIGN KEY(BookISBN13) REFERENCES Books(ISBN13),
 FOREIGN KEY(StoreID) REFERENCES BookStores(ID),
 FOREIGN KEY(StoreID,BookISBN13) REFERENCES StockBalance(StoreID,ISBN),
 
+
 );
 
 select * from Orders 
@@ -172,8 +155,16 @@ insert into Orders (CustomerID,BookISBN13,StoreID,Quantity,OrderDate) values (3,
 insert into Orders (CustomerID,BookISBN13,StoreID,Quantity,OrderDate) values (1,9788339434802,2,2,'2021-02-13')
 insert into Orders (CustomerID,BookISBN13,StoreID,Quantity,OrderDate) values (1,9786620703576,3,3,'2020-10-13')
 
+drop table Publishers
 
+create TABLE Publishers (
+    ID int PRIMARY KEY IDENTITY(1,1),
+    [Name] NVARCHAR(50),
+    Tel bigint
+)
 
+select * from Publishers;
 
-
-
+insert into Publishers ([Name],Tel) values ('xnix',0706123426)
+insert into Publishers ([Name], Tel) values ('ABD',07065437624)
+insert into Publishers ([Name], Tel) values ('Green',07067854321)
