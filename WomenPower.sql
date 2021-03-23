@@ -9,7 +9,7 @@ drop table Authors;
 create table Authors (
    ID  int primary key IDENTITY(1,1),
    FirstName nvarchar(50) not null,
-  AfterName nvarchar(50),
+   AfterName nvarchar(50),
    BirthDate date not null,
 
 );
@@ -42,13 +42,13 @@ create table Books (
 	Price_kr smallmoney not null, 
     PublishDate date not null,
 	AuthorID int not null,
-    BookStoreID int,
 	primary key (ISBN13),
 	foreign key (AuthorId) references Authors(ID),
-	CONSTRAINT chk_isbn13 CHECK (ISBN13  like '%[0-9]%')
+	CONSTRAINT chk_isbn13 CHECK (ISBN13  like '[0-9]')
 );
 --select * from Bookstores;
 drop table Books;
+
 select * from Books;
 
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9786797379604, 'Sky', 'En', 129.9,'2015-01-11',1);
@@ -60,7 +60,7 @@ insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) v
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9788339434802, 'Mountain', 'En', 109.9,'1995-10-11', 3);
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9782317268694, 'Spring', 'En', 229.9,'2008-07-16', 4);
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9786527017714, 'Autumn', 'En', 249.9,'2016-12-05', 4);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid )  values(9787662019991, 'Winter', 'En', 119.9,'2021-03-18', 4);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9787662019991, 'Winter', 'En', 119.9,'2021-03-18', 4);
 
 
 
@@ -77,11 +77,13 @@ create table BookStores (
 );
 
 select * from Bookstores;
+
 insert into Bookstores([Name],[Address]) values('Vasa Bookshop', 'Vasa Street 3, 41134 Gothenburg');
 insert into Bookstores([Name],[Address]) values('King Bookshop', 'King Street 20, 11425 Stockholm');
 insert into Bookstores([Name],[Address]) values('All Books', 'Spring Street 46, 22133 Lund')
 
 drop TABLE StockBalance;
+
 create table StockBalance (
     StoreID int not null,
     ISBN bigint ,
@@ -93,14 +95,85 @@ create table StockBalance (
 );
 
 select * from StockBalance;
-insert into StockBalance(StoreID,ISBN,Total) values (1,9786797379604,1)
-insert into StockBalance(StoreID,ISBN,Total) values (2,9784245085381,1)
-insert into StockBalance(StoreID,ISBN,Total) values (3,9781852636661,1)
-insert into StockBalance(StoreID,ISBN,Total) values (3,9786620703576,1)
-insert into StockBalance(StoreID,ISBN,Total) values (1,9783721497281,1)
-insert into StockBalance(StoreID,ISBN,Total) values (1,9784589562401,1)
-insert into StockBalance(StoreID,ISBN,Total) values (2,9788339434802,1)
-insert into StockBalance(StoreID,ISBN,Total) values (3,9782317268694,1)
-insert into StockBalance(StoreID,ISBN,Total) values (3,9786527017714,1)
+
+
+insert into StockBalance(StoreID,ISBN,Total) values (1,9786797379604,11)
+insert into StockBalance(StoreID,ISBN,Total) values (2,9784245085381,12)
+insert into StockBalance(StoreID,ISBN,Total) values (3,9781852636661,8)
+insert into StockBalance(StoreID,ISBN,Total) values (3,9786620703576,3)
+insert into StockBalance(StoreID,ISBN,Total) values (1,9783721497281,2)
+insert into StockBalance(StoreID,ISBN,Total) values (1,9784589562401,3)
+insert into StockBalance(StoreID,ISBN,Total) values (2,9788339434802,4)
+insert into StockBalance(StoreID,ISBN,Total) values (3,9782317268694,5)
+insert into StockBalance(StoreID,ISBN,Total) values (3,9786527017714,10)
 insert into StockBalance(StoreID,ISBN,Total) values (2,9787662019991,1)
+
+
+create TABLE [Address] (
+    ID int PRIMARY key identity(1,1),
+    Street NVARCHAR (150) not NULL,
+    PostCode int not NULL,
+    City NVARCHAR (50) not NULL,
+    Country NVARCHAR (50) not Null
+)
+
+select * from [Address];
+
+
+insert into Address (Street,PostCode,City,Country) values ('Sparvagen5',41475,'Hindas','Sweden')
+insert into Address (Street,PostCode,City,Country) values ('Majorna2',41370,'Gothenburg','Sweden')
+insert into Address (Street,PostCode,City,Country) values ('Solgatan',48415,'Malmo','Sweden')
+insert into Address (Street,PostCode,City,Country) values ('Vindgatan22',81075,'Oslo','Norway')
+
+
+
+create TABLE Customers (
+    ID int PRIMARY key identity(1,1),
+    [Name] nvarchar(50) not null,
+    AfterName nvarchar (50) DEFAULT '-',
+    AddressID int,
+    FOREIGN KEY (AddressID) REFERENCES [Address] (ID)
+
+);
+drop table Customers;
+
+select * from Customers;
+
+insert into Customers ([Name],AfterName,AddressID) values ( 'Sofia','Bonakdar',1)
+
+insert into Customers ([Name],AfterName,AddressID) values ( 'Elham','Danesh',2)
+
+insert into Customers ([Name],AfterName,AddressID) values ( 'Lulin','Bonakdar',3)
+
+insert into Customers ([Name],AfterName,AddressID) values ( 'Wenji','chin',4)
+
+
+drop table Orders
+
+create table Orders(
+    OrderNumber UNIQUEIDENTIFIER default newid(),
+    CustomerID int,
+    BookISBN13 bigint,
+    StoreID int,
+    Quantity int,
+    OrderDate DATE,
+
+FOREIGN KEY(CustomerID) REFERENCES Customers(ID),
+FOREIGN KEY(BookISBN13) REFERENCES Books(ISBN13),
+FOREIGN KEY(StoreID) REFERENCES BookStores(ID),
+FOREIGN KEY(StoreID,BookISBN13) REFERENCES StockBalance(StoreID,ISBN),
+
+);
+
+select * from Orders 
+
+insert into Orders (CustomerID,BookISBN13,StoreID,Quantity,OrderDate) values (1,9786797379604,1,1,'2021-02-13')
+insert into Orders (CustomerID,BookISBN13,StoreID,Quantity,OrderDate) values (3,9783721497281,1,2,'2021-03-15')
+insert into Orders (CustomerID,BookISBN13,StoreID,Quantity,OrderDate) values (1,9788339434802,2,2,'2021-02-13')
+insert into Orders (CustomerID,BookISBN13,StoreID,Quantity,OrderDate) values (1,9786620703576,3,3,'2020-10-13')
+
+
+
+
+
 
