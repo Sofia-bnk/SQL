@@ -52,7 +52,7 @@ drop table Books;
 select * from Books;
 
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9786797379604, 'Sky', 'En', 129.9,'2015-01-11',1);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid) values(9784245085381, 'Earth', 'En', 119.9,'2012-02-13',3);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9784245085381, 'Earth', 'En', 119.9,'2012-02-13',3);
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9781852636661, 'Water', 'En', 139.9,'1989-03-03',2);
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9786620703576, 'Wind', 'En', 129.9,'1974-07-04',2);
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid ) values(9783721497281, 'Storm', 'En', 99.9,'2020-08-09',2);
@@ -93,9 +93,14 @@ create table StockBalance (
 );
 
 select * from StockBalance;
-insert into StockBalance(StoreID,ISBN,Total) values (1,9784245085381,1)
-insert into StockBalance(StoreID,ISBN,Total) values (2,9787662019991,1)
-insert into StockBalance(StoreID,ISBN,Total) values (3,9786527017714,1)
+insert into StockBalance(StoreID,ISBN,Total) values (1,9786797379604,1)
+insert into StockBalance(StoreID,ISBN,Total) values (2,9784245085381,1)
+insert into StockBalance(StoreID,ISBN,Total) values (3,9781852636661,1)
 insert into StockBalance(StoreID,ISBN,Total) values (3,9786620703576,1)
 insert into StockBalance(StoreID,ISBN,Total) values (1,9783721497281,1)
+insert into StockBalance(StoreID,ISBN,Total) values (1,9784589562401,1)
+insert into StockBalance(StoreID,ISBN,Total) values (2,9788339434802,1)
+insert into StockBalance(StoreID,ISBN,Total) values (3,9782317268694,1)
+insert into StockBalance(StoreID,ISBN,Total) values (3,9786527017714,1)
+insert into StockBalance(StoreID,ISBN,Total) values (2,9787662019991,1)
 
