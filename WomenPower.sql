@@ -51,20 +51,39 @@ insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, Pu
 
 
 
+drop table StoreAddress; 
+
+create table StoreAddress(
+    ID int PRIMARY KEY IDENTITY(1,1),
+    Street NVARCHAR (150) not NULL,
+    PostCode int not NULL,
+    City NVARCHAR (50) not NULL,
+    Country NVARCHAR (50) not Null
+
+)
+
+select * from StoreAddress;
+
+insert into StoreAddress (Street,PostCode,City,Country) values ('Vasagatan3',41134,'Lund','Sweden')
+insert into StoreAddress (Street,PostCode,City,Country) values ('Kinggatan20',11425,'Gothenburg','Sweden')
+insert into StoreAddress (Street,PostCode,City,Country) values ('vargatan2',22133,'Stockholm','Sweden')
+
+
 
 drop table Bookstores;
 
 create table BookStores (
     ID int primary key IDENTITY(1,1),
 	[Name] nvarchar(120) not null,
-	[Address] nvarchar(120) not null,
+	AddressID int,
+    FOREIGN KEY (AddressID) REFERENCES [StoreAddress](ID)
 );
 
 select * from Bookstores;
 
-insert into Bookstores([Name],[Address]) values('Vasa Bookshop', 'Vasa Street 3, 41134 Gothenburg');
-insert into Bookstores([Name],[Address]) values('King Bookshop', 'King Street 20, 11425 Stockholm');
-insert into Bookstores([Name],[Address]) values('All Books', 'Spring Street 46, 22133 Lund')
+insert into Bookstores([Name],AddressID) values('Vasa Bookshop',3);
+insert into Bookstores([Name],AddressID) values('King Bookshop',2);
+insert into Bookstores([Name],AddressID) values('All Books',1)
 
 drop TABLE StockBalance;
 
@@ -93,7 +112,7 @@ insert into StockBalance(StoreID,ISBN,Total) values (3,9786527017714,10)
 insert into StockBalance(StoreID,ISBN,Total) values (2,9787662019991,1)
 
 
-create TABLE [Address] (
+create TABLE [CustomerAddress] (
     ID int PRIMARY key identity(1,1),
     Street NVARCHAR (150) not NULL,
     PostCode int not NULL,
@@ -101,13 +120,13 @@ create TABLE [Address] (
     Country NVARCHAR (50) not Null
 )
 
-select * from [Address];
+select * from [CustomerAddress];
 
 
-insert into Address (Street,PostCode,City,Country) values ('Sparvagen5',41475,'Hindas','Sweden')
-insert into Address (Street,PostCode,City,Country) values ('Majorna2',41370,'Gothenburg','Sweden')
-insert into Address (Street,PostCode,City,Country) values ('Solgatan',48415,'Malmo','Sweden')
-insert into Address (Street,PostCode,City,Country) values ('Vindgatan22',81075,'Oslo','Norway')
+insert into CustomerAddress (Street,PostCode,City,Country) values ('Sparvagen5',41475,'Hindas','Sweden')
+insert into CustomerAddress (Street,PostCode,City,Country) values ('Majorna2',41370,'Gothenburg','Sweden')
+insert into CustomerAddress (Street,PostCode,City,Country) values ('Solgatan',48415,'Malmo','Sweden')
+insert into CustomerAddress (Street,PostCode,City,Country) values ('Vindgatan22',81075,'Oslo','Norway')
 
 
 
@@ -116,7 +135,7 @@ create TABLE Customers (
     [Name] nvarchar(50) not null,
     AfterName nvarchar (50) DEFAULT '-',
     AddressID int,
-    FOREIGN KEY (AddressID) REFERENCES [Address] (ID)
+    FOREIGN KEY (AddressID) REFERENCES [CustomerAddress] (ID)
 
 );
 
@@ -130,7 +149,7 @@ insert into Customers ([Name],AfterName,AddressID) values ( 'Lulin','Bonakdar',3
 insert into Customers ([Name],AfterName,AddressID) values ( 'Wenji','chin',4)
 
 
-drop table Orders
+drop table Orders;
 
 create table Orders(
     OrderNumber UNIQUEIDENTIFIER default newid(),
