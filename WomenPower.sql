@@ -40,12 +40,12 @@ select * from Books;
 
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID) values(9786797379604, 'Sky', 'En', 129.9,'2015-01-11',1,2);
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9784245085381, 'Earth', 'En', 119.9,'2012-02-13',3,2);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9781852636661, 'Water', 'En', 139.9,'1989-03-03',2,1);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9786620703576, 'Wind', 'En', 129.9,'1974-07-04',2,1);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9783721497281, 'Storm', 'En', 99.9,'2020-08-09',2,3);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9784589562401, 'Lightning', 'En', 329.9,'1990-02-22',3,3);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9788339434802, 'Mountain', 'En', 109.9,'1995-10-11',3,1);
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9782317268694, 'Spring', 'En', 229.9,'2008-07-16',4,2);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9781852636661, 'Water', 'En', 139.9,'2020-03-03',2,1);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9786620703576, 'Wind', 'En', 129.9,'2013-07-04',2,1);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9783721497281, 'Storm', 'En', 99.9,'2014-08-09',2,3);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9784589562401, 'Lightning', 'En', 329.9,'2014-02-22',3,3);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9788339434802, 'Mountain', 'En', 109.9,'2018-10-11',3,1);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9782317268694, 'Spring', 'En', 229.9,'2020-07-16',4,2);
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9786527017714, 'Autumn', 'En', 249.9,'2016-12-05',4,3);
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9787662019991, 'Winter', 'En', 119.9,'2021-03-18',4,2);
 
@@ -186,4 +186,20 @@ select * from Publishers;
 
 insert into Publishers ([Name],Tel) values ('xnix',0706123426)
 insert into Publishers ([Name], Tel) values ('ABD',07065437624)
-insert into Publishers ([Name], Tel) values ('Green',07067854321)
+insert into Publishers ([Name], Tel) values ('Green',07067854321);
+
+
+
+--DROP view TitlePerAuthor
+
+CREATE VIEW TitlePerAuthor AS
+select concat(FirstName,' ',AfterName)as [Name],CONVERT(int, DATEDIFF(YY, LEFT(BirthDate, 4), getdate())) as Age, count(AuthorID) as Titles, sum(Price_kr) as StockValue
+FROM Authors 
+join Books ON Authors.ID = Books.AuthorID 
+group by FirstName,AfterName,BirthDate,AuthorID
+
+
+
+select * from TitlePerAuthor
+
+
