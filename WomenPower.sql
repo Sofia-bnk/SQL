@@ -2,7 +2,7 @@
 
 drop table Authors;
 
-
+--AUTHORS
 create table Authors (
    ID  int primary key IDENTITY(1,1),
    FirstName nvarchar(50) not null,
@@ -19,7 +19,7 @@ insert into Authors (Firstname, AfterName, Birthdate) values('Megan', 'Baker', '
 insert into Authors (Firstname, AfterName, Birthdate) values('Alison', 'Gray', '1968-11-01'); 
 insert into Authors (Firstname, AfterName, Birthdate) values('Dan', 'Kerr', '1977-10-22'); 
 
-
+--BOOKS
 create table Books (
     ISBN13 bigint not null,
 	Title nvarchar(120) not null,
@@ -56,6 +56,7 @@ insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, Pu
 
 drop table Bookstores;
 
+--BOOKSTORES
 create table BookStores (
     ID int primary key IDENTITY(1,1),
 	[Name] nvarchar(120) not null,
@@ -71,6 +72,7 @@ insert into Bookstores([Name],[Address]) values('All Books','vargatan 2,22133 St
 
 drop TABLE StockBalance;
 
+--STOCKBALANCE
 create table StockBalance (
     StoreID int not null,
     ISBN bigint ,
@@ -96,30 +98,14 @@ insert into StockBalance(StoreID,ISBN,Total) values (3,9786527017714,10)
 insert into StockBalance(StoreID,ISBN,Total) values (2,9787662019991,1)
 
 
-create TABLE [CustomerAddress] (
-    ID int PRIMARY key identity(1,1),
-    Street NVARCHAR (150) not NULL,
-    PostCode int not NULL,
-    City NVARCHAR (50) not NULL,
-    Country NVARCHAR (50) not Null
-)
 
-select * from [CustomerAddress];
-
-
-insert into CustomerAddress (Street,PostCode,City,Country) values ('Sparvagen5',41475,'Hindas','Sweden')
-insert into CustomerAddress (Street,PostCode,City,Country) values ('Majorna2',41370,'Gothenburg','Sweden')
-insert into CustomerAddress (Street,PostCode,City,Country) values ('Solgatan',48415,'Malmo','Sweden')
-insert into CustomerAddress (Street,PostCode,City,Country) values ('Vindgatan22',81075,'Oslo','Norway')
-
-
-
+--CUSTOMERS
 create TABLE Customers (
     ID int PRIMARY key identity(1,1),
     [Name] nvarchar(50) not null,
     AfterName nvarchar (50) DEFAULT '-',
-    AddressID int,
-    FOREIGN KEY (AddressID) REFERENCES [CustomerAddress] (ID)
+    Address nvarchar(max),
+
 
 );
 
@@ -127,14 +113,15 @@ drop table Customers;
 
 select * from Customers;
 
-insert into Customers ([Name],AfterName,AddressID) values ( 'Sofia','Bonakdar',1)
-insert into Customers ([Name],AfterName,AddressID) values ( 'Elham','Danesh',2)
-insert into Customers ([Name],AfterName,AddressID) values ( 'Lulin','Bonakdar',3)
-insert into Customers ([Name],AfterName,AddressID) values ( 'Wenji','chin',4)
+insert into Customers ([Name],AfterName,AddressID) values ( 'Sofia','Bonakdar','Sparvagen 5,41475 Hindas Sweden')
+insert into Customers ([Name],AfterName,AddressID) values ( 'Elham','Danesh', 'Majorna 2,41370 Gothenburg Sweden')
+insert into Customers ([Name],AfterName,AddressID) values ( 'Lulin','Bonakdar','Solgatan 13,48415 Malmo Sweden')
+insert into Customers ([Name],AfterName,AddressID) values ( 'Wenji','chin','Vindgatan22,81075 Oslo Norway')
 
 
 drop table Orders;
 
+--ORDERS
 create table Orders(
     OrderNumber UNIQUEIDENTIFIER default newid(),
     CustomerID int,
@@ -160,6 +147,7 @@ insert into Orders (CustomerID,BookISBN13,StoreID,Quantity,OrderDate) values (1,
 
 drop table Publishers
 
+--PUBLISHERS
 create TABLE Publishers (
     ID int PRIMARY KEY IDENTITY(1,1),
     [Name] NVARCHAR(50),
@@ -176,6 +164,7 @@ insert into Publishers ([Name], Tel) values ('Green',07067854321);
 
 DROP view TitlePerAuthor
 
+--TITLEPERAUTHOR
 CREATE VIEW TitlePerAuthor AS
 select concat(FirstName,' ',AfterName)as [Name],CONVERT(int, DATEDIFF(YY, LEFT(BirthDate, 4), getdate())) as Age, count(AuthorID) as Titles, sum(Price_kr) as StockValue
 FROM Authors 
@@ -188,6 +177,7 @@ select * from TitlePerAuthor
 
 drop table AuthorsBooks
 
+--AUTHORBOOKS
 CREATE table AuthorsBooks (
     AuthorID int,
     ISBN bigint,
