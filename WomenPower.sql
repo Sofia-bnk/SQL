@@ -79,7 +79,7 @@ create table StockBalance (
     Total int,
 
     	foreign key (StoreId) references BookStores(ID),
-        foreign key (ISBN) references Books(ISBN13),
+     -- foreign key (ISBN) references Books(ISBN13),
         primary key (StoreID,ISBN)
 );
 
@@ -113,10 +113,10 @@ drop table Customers;
 
 select * from Customers;
 
-insert into Customers ([Name],AfterName,AddressID) values ( 'Sofia','Bonakdar','Sparvagen 5,41475 Hindas Sweden')
-insert into Customers ([Name],AfterName,AddressID) values ( 'Elham','Danesh', 'Majorna 2,41370 Gothenburg Sweden')
-insert into Customers ([Name],AfterName,AddressID) values ( 'Lulin','Bonakdar','Solgatan 13,48415 Malmo Sweden')
-insert into Customers ([Name],AfterName,AddressID) values ( 'Wenji','chin','Vindgatan22,81075 Oslo Norway')
+insert into Customers ([Name],AfterName,Address) values ( 'Sofia','Bonakdar','Sparvagen 5,41475 Hindas Sweden')
+insert into Customers ([Name],AfterName,Address) values ( 'Elham','Danesh', 'Majorna 2,41370 Gothenburg Sweden')
+insert into Customers ([Name],AfterName,Address) values ( 'Lulin','Bonakdar','Solgatan 13,48415 Malmo Sweden')
+insert into Customers ([Name],AfterName,Address) values ( 'Wenji','chin','Vindgatan22,81075 Oslo Norway')
 
 
 drop table Orders;
@@ -131,9 +131,9 @@ create table Orders(
     OrderDate DATE,
 
 FOREIGN KEY(CustomerID) REFERENCES Customers(ID),
-FOREIGN KEY(BookISBN13) REFERENCES Books(ISBN13),
+--FOREIGN KEY(BookISBN13) REFERENCES Books(ISBN13),
 FOREIGN KEY(StoreID) REFERENCES BookStores(ID),
-FOREIGN KEY(StoreID,BookISBN13) REFERENCES StockBalance(StoreID,ISBN),
+FOREIGN KEY(StoreID,BookISBN13) REFERENCES StockBalance(StoreID,ISBN)
 
 
 );
@@ -147,19 +147,33 @@ insert into Orders (CustomerID,BookISBN13,StoreID,Quantity,OrderDate) values (1,
 
 drop table Publishers
 
---PUBLISHERS
+--PUBLISHERS used in books table
 create TABLE Publishers (
     ID int PRIMARY KEY IDENTITY(1,1),
     [Name] NVARCHAR(50),
-    Tel bigint
+    Tel varchar(50)
+
 )
 
 select * from Publishers;
 
-insert into Publishers ([Name],Tel) values ('xnix',0706123426)
-insert into Publishers ([Name], Tel) values ('ABD',07065437624)
-insert into Publishers ([Name], Tel) values ('Green',07067854321);
+insert into Publishers ([Name],Tel) values ('xnix','0706123426')
+insert into Publishers ([Name], Tel) values ('ABD','07065437624')
+insert into Publishers ([Name], Tel) values ('Green','07067854321');
 
+--CUSTOMERSSERVICES
+
+create table CustomersServices(
+    BookStoresID int,
+    Tel varchar(50),
+    FOREIGN KEY(BookStoresID) REFERENCES BookStores(ID),
+   
+)
+
+select * from CustomersServices
+insert into CustomersServices (BookStoresID,Tel) values (1,'06568826547')
+insert into CustomersServices (BookStoresID,Tel) values (2,'03573245754')
+insert into CustomersServices (BookStoresID,Tel) values (3,'06534565554')
 
 
 DROP view TitlePerAuthor
@@ -182,7 +196,7 @@ CREATE table AuthorsBooks (
     AuthorID int,
     ISBN bigint,
     FOREIGN key (AuthorID) REFERENCES Authors(ID),
-    FOREIGN key (ISBN) REFERENCES Books(ISBN13)
+    --FOREIGN key (ISBN) REFERENCES Books(ISBN13)
 )
 
 select * from AuthorsBooks
@@ -191,7 +205,6 @@ insert into AuthorsBooks (AuthorID,ISBN) values (1,9786797379604)
 insert into AuthorsBooks (AuthorID,ISBN) values (2,9786797379604)
 insert into AuthorsBooks (AuthorID,ISBN) values (3,9784245085381)
 insert into AuthorsBooks (AuthorID,ISBN) values (2,9784245085381)
-
 
 
  
