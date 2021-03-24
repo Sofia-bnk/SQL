@@ -28,7 +28,7 @@ create table Books (
     PublishDate date not null,
 	AuthorID int not null,
     PublisherID int,
-	primary key (ISBN13),
+	--primary key (ISBN13),
 	foreign key (AuthorId) references Authors(ID),
 	CONSTRAINT chk_isbn13 CHECK (ISBN13  like '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
     foreign key (PublisherID) references Publishers(ID),
@@ -38,8 +38,10 @@ drop table Books;
 
 select * from Books;
 
-insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID) values(9786797379604, 'Sky', 'En', 129.9,'2015-01-11',1,2);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9786797379604, 'Sky', 'En', 129.9,'2015-01-11',1,2);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9786797379604, 'Sky', 'En', 129.9,'2015-01-11',2,2);
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9784245085381, 'Earth', 'En', 119.9,'2012-02-13',3,2);
+insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9784245085381, 'Earth', 'En', 119.9,'2012-02-13',2,2);
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9781852636661, 'Water', 'En', 139.9,'2020-03-03',2,1);
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9786620703576, 'Wind', 'En', 129.9,'2013-07-04',2,1);
 insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, PublisherID ) values(9783721497281, 'Storm', 'En', 99.9,'2014-08-09',2,3);
@@ -51,39 +53,21 @@ insert into books(isbn13, title, [Language], price_kr, PublishDate, authorid, Pu
 
 
 
-drop table StoreAddress; 
-
-create table StoreAddress(
-    ID int PRIMARY KEY IDENTITY(1,1),
-    Street NVARCHAR (150) not NULL,
-    PostCode int not NULL,
-    City NVARCHAR (50) not NULL,
-    Country NVARCHAR (50) not Null
-
-)
-
-select * from StoreAddress;
-
-insert into StoreAddress (Street,PostCode,City,Country) values ('Vasagatan3',41134,'Lund','Sweden')
-insert into StoreAddress (Street,PostCode,City,Country) values ('Kinggatan20',11425,'Gothenburg','Sweden')
-insert into StoreAddress (Street,PostCode,City,Country) values ('vargatan2',22133,'Stockholm','Sweden')
-
-
 
 drop table Bookstores;
 
 create table BookStores (
     ID int primary key IDENTITY(1,1),
 	[Name] nvarchar(120) not null,
-	AddressID int,
-    FOREIGN KEY (AddressID) REFERENCES [StoreAddress](ID)
+	Address nvarchar(max),
+   
 );
 
 select * from Bookstores;
 
-insert into Bookstores([Name],AddressID) values('Vasa Bookshop',3);
-insert into Bookstores([Name],AddressID) values('King Bookshop',2);
-insert into Bookstores([Name],AddressID) values('All Books',1)
+insert into Bookstores([Name],[Address]) values('Vasa Bookshop','Vasagatan 3,41134 Lund Sweden');
+insert into Bookstores([Name],[Address]) values('King Bookshop','Kinggatan 20,11425 Gothenburg Sweden');
+insert into Bookstores([Name],[Address]) values('All Books','vargatan 2,22133 Stockholm Sweden')
 
 drop TABLE StockBalance;
 
@@ -190,7 +174,7 @@ insert into Publishers ([Name], Tel) values ('Green',07067854321);
 
 
 
---DROP view TitlePerAuthor
+DROP view TitlePerAuthor
 
 CREATE VIEW TitlePerAuthor AS
 select concat(FirstName,' ',AfterName)as [Name],CONVERT(int, DATEDIFF(YY, LEFT(BirthDate, 4), getdate())) as Age, count(AuthorID) as Titles, sum(Price_kr) as StockValue
@@ -202,4 +186,23 @@ group by FirstName,AfterName,BirthDate,AuthorID
 
 select * from TitlePerAuthor
 
+drop table AuthorsBooks
+
+CREATE table AuthorsBooks (
+    AuthorID int,
+    ISBN bigint,
+    FOREIGN key (AuthorID) REFERENCES Authors(ID),
+    FOREIGN key (ISBN) REFERENCES Books(ISBN13)
+)
+
+select * from AuthorsBooks
+
+insert into AuthorsBooks (AuthorID,ISBN) values (1,9786797379604)
+insert into AuthorsBooks (AuthorID,ISBN) values (2,9786797379604)
+insert into AuthorsBooks (AuthorID,ISBN) values (3,9784245085381)
+insert into AuthorsBooks (AuthorID,ISBN) values (2,9784245085381)
+
+
+
+ 
 
