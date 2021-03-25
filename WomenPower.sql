@@ -227,8 +227,8 @@ drop table AuthorsBooks
 create table AuthorsBooks (
     AuthorID int,
     ISBN bigint,
-    FOREIGN key (AuthorID) REFERENCES Authors(ID),
-    FOREIGN key (ISBN) REFERENCES Books(ISBN13)
+    foreign key (AuthorID) references Authors(ID),
+    foreign key (ISBN) references Books(ISBN13)
 )
 --select * from books
 --select * from AuthorsBooks
@@ -261,3 +261,9 @@ join Publishers p on (b.PublisherID = p.ID)
 GROUP by p.Name
 
 select * from  PublishersRevenue ;
+select * from books;
+select * from orders;
+select * from publishers;
+
+--Why we need this table?
+--It's good to know how much we are selling from each publishers for future planning. We can see from which publisher we make the most money.
