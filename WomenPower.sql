@@ -126,12 +126,6 @@ create TABLE Customers (
 
 select * from Customers;
 
-<<<<<<< HEAD
-insert into Customers ([Name],AfterName,Address) values ( 'Sofia','Bonakdar','Sparvagen 5,41475 Hindas Sweden')
-insert into Customers ([Name],AfterName,Address) values ( 'Elham','Danesh', 'Majorna 2,41370 Gothenburg Sweden')
-insert into Customers ([Name],AfterName,Address) values ( 'Lulin','Bonakdar','Solgatan 13,48415 Malmo Sweden')
-insert into Customers ([Name],AfterName,Address) values ( 'Wenji','chin','Vindgatan22,81075 Oslo Norway')
-=======
 insert into 
     Customers ([Name], AfterName, [Address]) --changed from addressID to address otherwise it didn't work
 values 
@@ -140,7 +134,6 @@ values
 	('Lulin', 'Bonakdar', 'Solgatan 13,48415 Malmo Sweden'),
 	('Wenji', 'chin', 'Vindgatan22,81075 Oslo Norway');
 
->>>>>>> 46db11d49de9e475f636d74f17b7ed8e4d9b0203
 
 
 drop table Orders;
@@ -154,17 +147,10 @@ create table Orders(
     Quantity int,
     OrderDate DATE,
 
-<<<<<<< HEAD
-FOREIGN KEY(CustomerID) REFERENCES Customers(ID),
---FOREIGN KEY(BookISBN13) REFERENCES Books(ISBN13),
-FOREIGN KEY(StoreID) REFERENCES BookStores(ID),
-FOREIGN KEY(StoreID,BookISBN13) REFERENCES StockBalance(StoreID,ISBN)
-=======
 foreign key(CustomerID) references Customers(ID),
 foreign key(BookISBN13) references Books(ISBN13),
 foreign key(StoreID) references BookStores(ID),
 foreign key(StoreID,BookISBN13) references StockBalance(StoreID,ISBN),
->>>>>>> 46db11d49de9e475f636d74f17b7ed8e4d9b0203
 
 
 );
@@ -184,41 +170,19 @@ drop table Publishers
 
 --PUBLISHERS used in books table
 create TABLE Publishers (
-<<<<<<< HEAD
-    ID int PRIMARY KEY IDENTITY(1,1),
-    [Name] NVARCHAR(50),
-    Tel varchar(50)
-
-=======
     ID int primary key identity(1,1),
     [Name] nvarchar(50),
     Tel bigint
->>>>>>> 46db11d49de9e475f636d74f17b7ed8e4d9b0203
 )
 
 select * from Publishers;
 
-<<<<<<< HEAD
-insert into Publishers ([Name],Tel) values ('xnix','0706123426')
-insert into Publishers ([Name], Tel) values ('ABD','07065437624')
-insert into Publishers ([Name], Tel) values ('Green','07067854321');
-
---CUSTOMERSSERVICES
-
-create table CustomersServices(
-    BookStoresID int,
-    Tel varchar(50),
-    FOREIGN KEY(BookStoresID) REFERENCES BookStores(ID),
-   
-)
-=======
 insert into 
     Publishers ([Name],Tel) 
 values 
     ('xnix',0706123426),
 	('ABD',07065437624),
 	('Green',07067854321);
->>>>>>> 46db11d49de9e475f636d74f17b7ed8e4d9b0203
 
 select * from CustomersServices
 insert into CustomersServices (BookStoresID,Tel) values (1,'06568826547')
@@ -255,13 +219,8 @@ drop table AuthorsBooks
 create table AuthorsBooks (
     AuthorID int,
     ISBN bigint,
-<<<<<<< HEAD
-    FOREIGN key (AuthorID) REFERENCES Authors(ID),
-    --FOREIGN key (ISBN) REFERENCES Books(ISBN13)
-=======
     foreign key (AuthorID) references Authors(ID),
     foreign key (ISBN) references Books(ISBN13)
->>>>>>> 46db11d49de9e475f636d74f17b7ed8e4d9b0203
 )
 
 select * from AuthorsBooks
@@ -275,6 +234,39 @@ values
 	(2, 9784245085381);
  
 
+-- first try
+
+-- CREATE VIEW Most_Popular_Publisher AS
+-- SELECT COUNT(ID) as TotalTimes, BookStores.ID as StoreID
+-- from BookStores, Orders
+-- where BookStores.ID = Orders.StoreID
+-- GROUP BY BookStores.ID
+
+-- drop view Most_Popular_Publisher
+-- select * FROM Most_Popular_Publisher
+
+-- modified our everyone's idea
+-- CREATE VIEW Publisher_Revenue_Each_Store AS
+-- SELECT  count(books.PublisherID), count(Publishers.Name)
+-- from Orders
+-- inner join Books
+-- ON orders.BookISBN13 = books.isbn13
+-- inner join Publishers
+-- ON books.PublisherID = Publishers.ID
+-- GROUP by books.PublisherID, Publishers.Name
+
+--lulin's original code
+-- CREATE VIEW Publisher_Revenue_Each_Store AS
+-- SELECT Orders.StoreID, Orders.BookISBN13, orders.Quantity*books.price_kr as totalRevenue, books.PublisherID, Publishers.Name
+-- from Orders
+-- inner join Books
+-- ON orders.BookISBN13 = books.isbn13
+-- inner join Publishers
+-- ON books.PublisherID = Publishers.ID
+
+
+-- SELECT * FROM Publisher_Revenue_Each_Store
+-- drop VIEW Publisher_Revenue_Each_Store
 
  
 
