@@ -1,7 +1,4 @@
 
---drop table Authors;
-truncate table Authors;
-
 --AUTHORS
 create table Authors (
    ID  int primary key IDENTITY(1,1),
@@ -39,7 +36,7 @@ create table Books (
     foreign key (PublisherID) references Publishers(ID),
 );
 
---drop table Books;
+
 
 select * from Books;
 
@@ -58,7 +55,7 @@ values
     (9787662019991, 'Winter', 'En', 40, '2021-03-18', 2);
 
 
---drop table Bookstores;
+
 
 --BOOKSTORES
 create table BookStores (
@@ -82,7 +79,6 @@ values
 	('All Books','vargatan 2','22133','Stockholm', 'Sweden',1);
 
 
---drop TABLE StockBalance;
 
 --STOCKBALANCE
 create table StockBalance (
@@ -109,10 +105,10 @@ values
 	(1, 9783721497282, 2),
 	(1, 9784589562401, 3),
 	(2, 9788339434802, 4),
+    (2, 9783721497282, 3),
 	(3, 9782317268694, 5),
 	(3, 9786527017714, 10),
 	(2, 9787662019991, 1);
-  
 
 
 --CUSTOMERS
@@ -127,7 +123,6 @@ create TABLE Customers (
 
 );
 
---drop table Customers;
 
 select * from Customers;
 
@@ -137,7 +132,6 @@ insert into Customers ([Name],LastName,Street,PostCode,City,Country) values ( 'L
 insert into Customers ([Name],LastName,Street,PostCode,City,Country) values ( 'Wenji','billiow','Vindgatan22','81075','Oslo','Norway')
 
 
---drop table Orders;
 
 --ORDERS
 create table Orders(
@@ -157,9 +151,9 @@ select * from Orders
 insert into 
     Orders (CustomerID,StoreID,OrderDate) 
 values 
-    (1, 1,'2021-02-13'),
+    (1,1,'2021-02-13'),
 	(3,1,'2021-03-15'),
-	(4, 2,'2021-02-13'),
+	(4,2,'2021-02-13'),
 	(2,3,'2020-10-13');
 
 
@@ -172,8 +166,10 @@ create table OrderDetails(
      Quantity int,
 FOREIGN KEY(BookISBN13) REFERENCES Books(ISBN13),
 FOREIGN KEY(OrderNumber) REFERENCES Orders(OrderNumber)
-);
+); 
+
  select * from OrderDetails;
+
  INSERT INTO OrderDetails (OrderNumber,BookISBN13,UnitPrice,Quantity)
  values
  (101,9786797379604,50,2),
@@ -184,7 +180,7 @@ FOREIGN KEY(OrderNumber) REFERENCES Orders(OrderNumber)
  (100,9787662019991,40,1);
 
 
---drop table Publishers
+
 
 CREATE table Publishers
 (
@@ -202,7 +198,7 @@ insert into Publishers ([Name], Tel) values ('ABD','07065437624')
 insert into Publishers ([Name], Tel) values ('Green','07067854321');
 
 
---drop table CustomerServices
+
 
 --CUSTOMERSSERVICES used in BookStores
 
@@ -219,17 +215,17 @@ insert into CustomerServices (Tel) values ('06534565554')
 
 
 
---drop view TitlePerAuthor;
 
 create view 
 TitlePerAuthor 
 as
 select 
+AuthorID,
     concat(FirstName,' ',LastName)as [Name],
 	convert(int, datediff(YY, LEFT(BirthDate, 4), getdate())) as Age, 
-	count(AuthorID) as Titles,
+	count(distinct Title) as Titles,
+    sum(Total) as StockCount,
     sum(Total*Price_kr) as StockValue
-
 from Authors 
 join AuthorsBooks 
 on Authors.ID = AuthorsBooks.AuthorID 
@@ -243,16 +239,16 @@ group by
 	BirthDate,
 	AuthorID;
 
-
 select * from TitlePerAuthor;
 select * from StockBalance;
 select * from AuthorsBooks;
-select * from books;
+select * from Books;
+select * from BookStores;
 
 
 
 
---drop table AuthorsBooks
+
 
 --AUTHORSBOOKS many to many
 create table AuthorsBooks (
@@ -264,7 +260,7 @@ create table AuthorsBooks (
 
 )
 select * from books
---select * from AuthorsBooks
+select * from AuthorsBooks
 
 insert into 
     AuthorsBooks (AuthorID,ISBN) 
@@ -283,9 +279,9 @@ values
     (1, 9787662019991);
 
    
---drop VIEW PublishersRevenue 
+
 create view 
- PublishersRevenue 
+PublishersRevenue 
 as
 select p.Name, sum(Quantity*UnitPrice) as TotalRevenue
 from  OrderDetails   
@@ -293,7 +289,7 @@ join books b on (OrderDetails.BookISBN13 = b.ISBN13)
 join Publishers p on (b.PublisherID = p.ID)
 GROUP by p.Name
 
-select * from PublishersRevenue 
+select * from PublishersRevenue;
 
 
 --Why we need this table?
