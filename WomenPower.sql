@@ -8,7 +8,6 @@ create table Authors (
 
 );
 
-
 select * from Authors;
 
 insert into 
@@ -43,16 +42,16 @@ select * from Books;
 insert into 
     books(isbn13, title, [Language], price_kr, PublishDate, PublisherID) 
 values
-    (9786797379604, 'Sky', 'En', 50, '2015-01-11', 2),
-    (9784245085381, 'Earth', 'En', 60, '2012-02-13', 2),
-    (9781852636661, 'Water', 'En', 70, '2020-03-03', 1),
-    (9786620703576, 'Wind', 'En', 80, '2013-07-04', 1),
-    (9783721497282, 'Storm', 'En', 90, '2014-08-09', 3),
-    (9784589562401, 'Lightning', 'En', 100, '2014-02-22',3),
-    (9788339434802, 'Mountain', 'En', 100, '2018-10-11', 1),
-    (9782317268694, 'Spring', 'En', 20, '2020-07-16', 2),
-    (9786527017714, 'Autumn', 'En', 30, '2016-12-05', 3),
-    (9787662019991, 'Winter', 'En', 40, '2021-03-18', 2);
+    (9789113101880, 'Sky', 'En', 50, '2015-01-11', 2),
+    (9780393640311, 'Earth', 'En', 60, '2012-02-13', 2),
+    (9780962689543, 'Water', 'En', 70, '2020-03-03', 1),
+    (9781108478328, 'Wind', 'En', 80, '2013-07-04', 1),
+    (9789151916484, 'Storm', 'En', 90, '2014-08-09', 3),
+    (9780141346809, 'Lightning', 'En', 100, '2014-02-22',3),
+    (9780954151157, 'Mountain', 'En', 100, '2018-10-11', 1),
+    (9789178190492, 'Spring', 'En', 20, '2020-07-16', 2),
+    (9781593279929, 'Autumn', 'En', 30, '2016-12-05', 3),
+    (9780141340241, 'Winter', 'En', 40, '2021-03-18', 2);
 
 
 
@@ -76,7 +75,7 @@ insert into
 values
     ('Vasa Bookshop','Vasagatan 3','41134','Lund','Sweden',1),
 	('King Bookshop','Kinggatan 20','11425' ,'Gothenburg' ,'Sweden',2),
-	('All Books','vargatan 2','22133','Stockholm', 'Sweden',1);
+	('Eli Bookshop','vargatan 2','22133','Stockholm', 'Sweden',1);
 
 
 
@@ -98,17 +97,17 @@ select * from StockBalance;
 insert into 
     StockBalance(StoreID, ISBN, Total) 
 values 
-    (1, 9786797379604, 11),
-	(2, 9784245085381, 12),
-	(3, 9781852636661, 8),
-	(3, 9786620703576, 3),
-	(1, 9783721497282, 2),
-	(1, 9784589562401, 3),
-	(2, 9788339434802, 4),
-    (2, 9783721497282, 3),
-	(3, 9782317268694, 5),
-	(3, 9786527017714, 10),
-	(2, 9787662019991, 1);
+    (1, 9789113101880, 11),
+	(2, 9780393640311, 12),
+	(3, 9780962689543, 8),
+	(3, 9781108478328, 3),
+	(1, 9789151916484, 2),
+	(1, 9780141346809, 3),
+	(2, 9780954151157, 4),
+    (2, 9789178190492, 3),
+	(1, 9781108478328, 5),
+	(3, 9781593279929, 10),
+	(2, 9780141340241, 1);
 
 
 --CUSTOMERS
@@ -172,16 +171,15 @@ FOREIGN KEY(OrderNumber) REFERENCES Orders(OrderNumber)
 
  INSERT INTO OrderDetails (OrderNumber,BookISBN13,UnitPrice,Quantity)
  values
- (101,9786797379604,50,2),
- (101,9786620703576,80,2),
- (102,9784589562401,100,1),
- (102,9788339434802,100,2),
- (103,9786797379604,50,4),
- (100,9787662019991,40,1);
+ (101,9789113101880,50,2),
+ (101,9780393640311,60,2),
+ (102,9780962689543,70,1),
+ (102,9781108478328,80,2),
+ (103,9789113101880,50,4),
+ (100,9780141340241,40,1);
 
 
-
-
+--PUBLISHERS
 CREATE table Publishers
 (
 
@@ -212,7 +210,6 @@ create table CustomerServices(
 select * from CustomersServices
 insert into CustomerServices (Tel) values ('06568826547')
 insert into CustomerServices (Tel) values ('06534565554')
-
 
 
 
@@ -249,7 +246,6 @@ select * from BookStores;
 
 
 
-
 --AUTHORSBOOKS many to many
 create table AuthorsBooks (
     AuthorID int,
@@ -265,18 +261,19 @@ select * from AuthorsBooks
 insert into 
     AuthorsBooks (AuthorID,ISBN) 
 values 
-    (1, 9786797379604),
-	(2, 9786797379604),
-	(3, 9784245085381),
-    (4, 9784245085381),
-	(2, 9781852636661),
-    (3, 9786620703576),
-    (4, 9783721497282),
-    (3, 9784589562401),
-    (2, 9788339434802),
-    (2, 9782317268694),
-    (1, 9786527017714),
-    (1, 9787662019991);
+    (1, 9789113101880),
+	(2, 9789113101880),
+	(3, 9780393640311),
+    (4, 9780393640311),
+	(2, 9780962689543),
+    (3, 9781108478328),
+    (4, 9789151916484),
+    (3, 9780141346809),
+    (2, 9780954151157),
+    (2, 9789178190492),
+    (1, 9781593279929),
+    (1, 9780141340241);
+
 
    
 
@@ -292,5 +289,48 @@ GROUP by p.Name
 select * from PublishersRevenue;
 
 
---Why we need this table?
---It's good to know how much we are selling from each publishers for future planning. We can see from which publisher we make the most money.
+
+
+select  ISBN13, Title, concat(Author, iif(numberOfAuthors > 1, ' m.fl.', ''))as Author, Price_kr,PublishDate from(
+select 
+ROW_NUMBER() OVER (PARTITION BY ISBN13, Title order by ISBN13, Title) as rownumber, 
+count(Authors.ID) over (partition by isbn13, title) as numberOfAuthors,
+ISBN13, 
+Title, 
+concat(Firstname,' ',LastName) as Author,
+Price_kr,PublishDate
+from Authors
+join AuthorsBooks on (AuthorsBooks.AuthorID=Authors.ID)
+join Books on (AuthorsBooks.ISBN=Books.isbn13)
+where ISBN13 = '9781852636661'
+) q where rownumber = 1
+
+
+
+select * from Bookstores
+
+
+select bs.Name, ISNULL(convert(varchar(10),q.Total),'ej i lager') as 'In Stock' from (
+    select [name], Total 
+ from StockBalance
+ join BookStores ON (StockBalance.StoreID=BookStores.ID) 
+   where StockBalance.ISBN='9784245085381'
+) q
+right join BookStores bs on bs.Name=q.name 
+
+
+
+-- Delete order
+
+drop table StockBalance;
+drop table OrderDetails;
+drop table AuthorsBooks;
+drop table Authors;
+drop table Books;
+drop table Publishers;
+drop table Orders;
+drop table BookStores;
+drop table CustomerServices;
+drop table Customers;
+
+
